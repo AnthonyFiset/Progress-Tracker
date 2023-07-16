@@ -1,12 +1,18 @@
-import React, { useState } from "react";
-import './App.css';
+import React, { useState, useEffect } from "react";
+import "./App.css";
 
 function ProgressTracker() {
-  const [goal, setGoal] = useState(0);
-  const [progress, setProgress] = useState(0);
+  const [goal, setGoal] = useState(parseInt(localStorage.getItem("goal")) || 0);
+  const [progress, setProgress] = useState(parseInt(localStorage.getItem("progress")) || 0);
+
+  useEffect(() => {
+    localStorage.setItem("goal", goal);
+    localStorage.setItem("progress", progress);
+  }, [goal, progress]);
 
   const handleGoalChange = (e) => {
-    setGoal(e.target.value);
+    const goal = parseInt(e.target.value);
+    setGoal(goal);
   };
 
   const incrementProgress = () => {
@@ -26,21 +32,24 @@ function ProgressTracker() {
 
   return (
     <div className="container">
-      <h1>Job Applications</h1>
-      <input 
-        type="number" 
-        value={goal} 
-        onChange={handleGoalChange} 
+      <h1>Progress Tracker</h1>
+      <input
+        type="number"
+        value={goal}
+        onChange={handleGoalChange}
         placeholder="Enter your goal"
       />
       <button onClick={incrementProgress}>Applied</button>
       <button onClick={resetProgress}>Reset</button>
       <div className="progressBarContainer">
-        <div className="progressBar" style={{width: `${progressBarWidth}%`}}></div>
+        <div className="progressBar" style={{ width: `${progressBarWidth}%` }}></div>
       </div>
-      <p>Job Applications: {progress} out of {goal}</p>
+      <p>
+        Jobs applied: {progress} out of {goal}
+      </p>
     </div>
   );
 }
 
 export default ProgressTracker;
+
